@@ -212,7 +212,7 @@
             padding-left: 0;
             margin: 1rem 0;
         }
-        
+
         .faq-answer-content > p + ol, .faq-answer-content > p + ul {
             margin-top: -0.5em;
             margin-bottom: 1em;
@@ -423,14 +423,14 @@
                   <div class="faq-answer">
                     <div class="faq-answer-content">
                         <p>To get a key you will need to go <a href="https://hydrogen.lat/unlock">here</a> and complete a few offers to get a key. There are many different offers so I have narrowed them down into three different categories instead of making a tutorial for EVERY offer.</p>
-                        
+
                         <p><strong>App Downloads</strong></p>
                         <ol style="list-style-type: decimal; list-style-position: inside; padding-left: 1em;">
                             <li style="margin-bottom: 0.5em;">Click the download button and stay on the download page for 45 seconds</li>
                             <li style="margin-bottom: 0.5em;">Go back to the Work.ink tab after 45 seconds</li>
                             <li>Remove the downloaded file</li>
                         </ol>
-                        
+
                         <p><strong>Browser Extensions</strong></p>
                         <ol style="list-style-type: decimal; list-style-position: inside; padding-left: 1em;">
                             <li style="margin-bottom: 0.5em;">Install the extension</li>
@@ -444,7 +444,7 @@
                             <li style="margin-bottom: 0.5em;">Go to their website and stay there for 45 seconds</li>
                             <li>Go back to the Work.ink tab after 45 seconds</li>
                         </ol>
-                        
+
                         <p><strong>Extra</strong></p>
                         <ul style="list-style-type: disc; padding-left: 2em; list-style-position: outside;">
                             <li style="margin-bottom: 0.5em;">Keep in mind that if you go back to the Work.ink tab before the 45 second timer is over you WILL have to start over again</li>
@@ -598,6 +598,42 @@
                   </div>
                 </div>
 
+                <div class="faq-item">
+                  <div class="faq-question">
+                    <span>Does Hydrogen work on VMs?</span>
+                    <svg class="faq-arrow" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </div>
+                  <div class="faq-answer">
+                    <div class="faq-answer-content">
+                      <p>Hydrogen isn’t officially supported on virtual machines. We can’t guarantee functionality. If you manage get Hydrogen working in a VM we will NOT be able to help you with any issues.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="faq-item">
+                  <div class="faq-question">
+                    <span>Can I resell keys?</span>
+                    <svg class="faq-arrow" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </div>
+                  <div class="faq-answer">
+                    <div class="faq-answer-content">
+                      <p>If you want to resell keys you will have to contact Gladius directly. You can either send him a DM or make a ticket.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="faq-item">
+                  <div class="faq-question">
+                    <span>I didn’t get my adless key.</span>
+                    <svg class="faq-arrow" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </div>
+                  <div class="faq-answer">
+                    <div class="faq-answer-content">
+                      <p>If you didn’t get your key after purchase, check your spam folder first. If it’s not there then make a ticket.</p>
+                    </div>
+                  </div>
+                </div>
+
             </div>
         </div>
     </main>
@@ -607,6 +643,13 @@
             question.addEventListener('click', () => {
                 const answer = question.nextElementSibling;
                 const isActive = question.classList.contains('active');
+
+                document.querySelectorAll('.faq-question.active').forEach(activeQuestion => {
+                    if (activeQuestion !== question) {
+                        activeQuestion.classList.remove('active');
+                        activeQuestion.nextElementSibling.style.maxHeight = '0px';
+                    }
+                });
 
                 question.classList.toggle('active');
 
@@ -625,16 +668,30 @@
             const searchTerm = event.target.value.toLowerCase();
 
             faqItems.forEach(item => {
-                const itemText = item.textContent.toLowerCase();
+                const questionText = item.querySelector('.faq-question span').textContent.toLowerCase();
+                const answerText = item.querySelector('.faq-answer-content').textContent.toLowerCase();
+                const itemText = questionText + ' ' + answerText;
+
                 if (itemText.includes(searchTerm)) {
                     item.style.display = 'flex';
                 } else {
                     item.style.display = 'none';
                 }
+
+                if (item.style.display !== 'none') {
+                    const question = item.querySelector('.faq-question');
+                    const answer = item.querySelector('.faq-answer');
+                    if (question.classList.contains('active')) {
+                         if (!answerText.includes(searchTerm)) {
+                            question.classList.remove('active');
+                            answer.style.maxHeight = '0px';
+                         }
+                    }
+                }
             });
         });
     </script>
-    
+
     <div id="saba-container">
         <img id="saba-image" src="saba.png" alt="Saba">
     </div>
@@ -645,10 +702,11 @@
         let keySequence = [];
 
         document.addEventListener('keydown', (e) => {
-            if (document.activeElement === searchInput) {
+            const focusedElement = document.activeElement;
+            if (focusedElement && (focusedElement.tagName === 'INPUT' || focusedElement.tagName === 'TEXTAREA')) {
                 return;
             }
-            
+
             const key = e.key.toLowerCase();
             keySequence.push(key);
 
@@ -672,8 +730,12 @@
                 return;
             }
 
-            sound.currentTime = 0;
-            sound.play();
+            if (!sound.paused) {
+                sound.pause();
+                sound.currentTime = 0;
+            }
+            sound.play().catch(e => console.error("Error playing sound:", e));
+
 
             container.style.display = 'flex';
             container.classList.add('animate');
