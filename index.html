@@ -232,14 +232,14 @@
         }
 
         #saba-image {
-            max-width: 80vw;
-            max-height: 80vh;
+            max-width: 40vw;
+            max-height: 40vh;
             opacity: 0;
             transform: scale(0.1);
         }
 
         #saba-container.animate #saba-image {
-            animation: growAndFade 3s ease-out forwards;
+            animation: growAndFade 1s ease-out forwards;
         }
 
         @keyframes growAndFade {
@@ -703,7 +703,7 @@
     <div id="saba-container">
         <img id="saba-image" src="saba.png" alt="Saba">
     </div>
-    <audio id="saba-sound" src="laugh.mp3" preload="auto"></audio>
+    <audio id="saba-sound" src="saba.mp3" preload="auto"></audio>
 
     <script>
         const sabaCode = ['s', 'a', 'b', 'a'];
@@ -742,7 +742,7 @@
                 sound.pause();
                 sound.currentTime = 0;
             }
-            sound.play().catch(e => console.error("Error playing sound:", e));
+            sound.play().catch(e => console.error("sound error: ", e));
 
 
             container.style.display = 'flex';
