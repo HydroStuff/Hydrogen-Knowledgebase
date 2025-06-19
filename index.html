@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
     <title>Frequently Asked Questions</title>
     <link rel="icon" type="image/png" href="logo.png?v=1">
     <link rel="shortcut icon" type="image/png" href="logo.png?v=1">
@@ -20,19 +21,19 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #0f0f0f;
+            background-color: #1a1a1a;
             color: #e0e0e0;
             line-height: 1.6;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100dvh;
             overflow: hidden;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 calc(20px + env(safe-area-inset-right, 0px)) 0 calc(20px + env(safe-area-inset-left, 0px));
             width: 100%;
         }
 
@@ -41,6 +42,7 @@
             border-bottom: 1px solid #333;
             flex-shrink: 0;
             z-index: 100;
+            padding-top: env(safe-area-inset-top, 0);
         }
 
         .header-content {
@@ -48,7 +50,7 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            padding: 1rem 1.5rem;
+            padding: 1rem calc(1.5rem + env(safe-area-inset-right, 0px)) 1rem calc(1.5rem + env(safe-area-inset-left, 0px));
             max-width: none;
             margin: 0;
         }
@@ -98,8 +100,9 @@
         }
 
         main {
+            background-color: #0f0f0f;
             padding-top: 2rem;
-            padding-bottom: 2rem;
+            padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
             flex-grow: 1;
             overflow-y: auto;
         }
@@ -127,7 +130,8 @@
             padding: 1rem 1.5rem;
             font-size: 1.2em;
             font-weight: 500;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, border-color 0.35s ease;
+            border-bottom: 1px solid transparent;
         }
 
         .faq-question:hover {
@@ -135,7 +139,7 @@
         }
 
         .faq-question.active {
-            border-bottom: 1px solid #333;
+            border-bottom-color: #333;
         }
 
         .faq-question span {
@@ -266,15 +270,15 @@
         @media (max-width: 768px) {
             main {
                 padding-top: 1.5rem;
-                padding-bottom: 1.5rem;
+                padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
             }
 
             .container {
-                padding: 0 15px;
+                padding: 0 calc(15px + env(safe-area-inset-right, 0px)) 0 calc(15px + env(safe-area-inset-left, 0px));
             }
 
             .header-content {
-                padding: 1rem;
+                padding: 1rem calc(1rem + env(safe-area-inset-right, 0px)) 1rem calc(1rem + env(safe-area-inset-left, 0px));
                 flex-wrap: wrap;
                 row-gap: 1rem;
             }
@@ -342,7 +346,7 @@
 <body>
     <header>
         <div class="header-content">
-            <a href="https://discord.gg/gethydrogen" target="_blank" rel="noopener noreferrer" class="logo-area">
+            <a href="https://discord.com/channels/924722337981530132/1172773228201132115" class="logo-area">
                 <img src="./logo.png" alt="Hydrogen Logo" class="header-logo-img">
                 <span class="header-logo-text">Frequently Asked Questions</span>
             </a>
