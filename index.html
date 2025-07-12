@@ -499,6 +499,24 @@
       display: none;
     }
 
+    .hidden-radio-image {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 100px;
+      height: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 999;
+      transform-origin: center;
+    }
+
+    .hidden-radio-image.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     @media (max-width: 600px) {
       .sidebar {
         display: none;
@@ -595,6 +613,11 @@
       .search-result > div:first-child {
         font-size: 0.85rem !important;
       }
+      .hidden-radio-image {
+        bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+        right: 25px;
+        width: 80px;
+      }
     }
     @media (max-width: 400px) {
       .page-content {
@@ -638,6 +661,9 @@
       }
       .search-result > div:first-child {
         font-size: 0.8rem !important;
+      }
+      .hidden-radio-image {
+        width: 70px;
       }
     }
   </style>
@@ -761,26 +787,26 @@
           viewBox="0 0 16 16"
         >
           <path
-            d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 
-            0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 
-            12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 
-            0 0-.052-.025c-1.125.194-2.22.534-3.257 
-            1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 
-            9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 
-            0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 
-            0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 
-            0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 
-            0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 
-            0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 
-            8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 
-            .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 
-            13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 
-            0 0 0-.02-.019m-8.198 7.307c-.789 
-            0-1.438-.724-1.438-1.612s.637-1.613 
-            1.438-1.613c.807 0 1.45.73 1.438 1.613 
-            0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 
-            0-1.438-.724-1.438-1.612s.637-1.613 
-            1.438-1.613c.807 0 1.451.73 1.438 
+            d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05
+            0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2
+            12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0
+            0 0-.052-.025c-1.125.194-2.22.534-3.257
+            1.011a.04.04 0 0 0-.021.018C.356 6.024-.213
+            9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0
+            0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05
+            0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05
+            0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0
+            0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05
+            0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8
+            8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0
+            .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019
+            13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03
+            0 0 0-.02-.019m-8.198 7.307c-.789
+            0-1.438-.724-1.438-1.612s.637-1.613
+            1.438-1.613c.807 0 1.45.73 1.438 1.613
+            0 .888-.637 1.612-1.438 1.612m5.316 0c-.788
+            0-1.438-.724-1.438-1.612s.637-1.613
+            1.438-1.613c.807 0 1.451.73 1.438
             1.613 0 .888-.631 1.612-1.438 1.612"
           />
         </svg>
@@ -870,6 +896,9 @@
       </div>
     </div>
   </div>
+
+  <img src="radio.png" alt="Hidden Radio" class="hidden-radio-image" id="hidden-radio-image"/>
+  <audio id="hidden-radio-audio" src="radio.mp3" loop></audio>
 
   <script>
     const sidebar = document.getElementById('sidebar');
@@ -1403,7 +1432,7 @@
       
       if (window.visualViewport) {
           lastViewportHeight = 0;
-          adjustSearchResultsHeight(); 
+          adjustSearchResultsHeight();
           window.visualViewport.addEventListener('resize', adjustSearchResultsHeight);
       }
     }
@@ -1532,7 +1561,90 @@
       }, 50);
     }
 
+    let sabaClickCount = 0;
+    let sabaClickTimeout;
+    const radioImage = document.getElementById('hidden-radio-image');
+    const radioAudio = document.getElementById('hidden-radio-audio');
+
+    let audioContext;
+    let analyserNode;
+    let audioSource;
+    let audioDataArray;
+    let isAudioSetup = false;
+    
+    const pulseIntensity = 0.8;
+    const smoothingFactor = 0.8;
+    const startBin = 8;
+    const endBin = 24;
+    
+    let currentScale = 1.0;
+
+    function setupAudio() {
+        if (isAudioSetup) return;
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyserNode = audioContext.createAnalyser();
+        analyserNode.fftSize = 64;
+        audioSource = audioContext.createMediaElementSource(radioAudio);
+        audioDataArray = new Uint8Array(analyserNode.frequencyBinCount);
+        audioSource.connect(analyserNode);
+        analyserNode.connect(audioContext.destination);
+        isAudioSetup = true;
+    }
+
+    function animateRadio() {
+        if (!radioImage.classList.contains('visible')) {
+            return;
+        }
+        requestAnimationFrame(animateRadio);
+
+        analyserNode.getByteFrequencyData(audioDataArray);
+
+        let sum = 0;
+        const melodicData = audioDataArray.slice(startBin, endBin);
+        for (const amplitude of melodicData) {
+            sum += amplitude;
+        }
+        const average = sum / melodicData.length;
+
+        const targetScale = 1 + (average / 255) * pulseIntensity;
+
+        currentScale += (targetScale - currentScale) * smoothingFactor;
+        
+        radioImage.style.transform = `scale(${currentScale})`;
+    }
+
+    function handleSabaClick() {
+        sabaClickCount++;
+        
+        clearTimeout(sabaClickTimeout);
+        sabaClickTimeout = setTimeout(() => {
+            sabaClickCount = 0;
+        }, 1000);
+
+        if (sabaClickCount === 3) {
+            setupAudio();
+            radioImage.classList.add('visible');
+            radioAudio.play();
+            animateRadio();
+            sabaClickCount = 0;
+            clearTimeout(sabaClickTimeout);
+        }
+    }
+
+    function stopRadio() {
+        radioAudio.pause();
+        radioAudio.currentTime = 0;
+        radioImage.classList.remove('visible');
+        
+        currentScale = 1.0;
+        radioImage.style.transform = 'scale(1)';
+    }
+
     function navigateToPage(pageId, scrollId = null, query = null) {
+      stopRadio();
+      sabaClickCount = 0;
+      clearTimeout(sabaClickTimeout);
+
       document.querySelectorAll('.sidebar-link').forEach((link) => {
         link.classList.toggle('selected', link.dataset.page === pageId);
       });
@@ -1561,6 +1673,14 @@
         });
       });
 
+      if (pageId === 'credits') {
+          const sabaImages = document.querySelectorAll('#page-content img.credit-avatar[src="saba.png"]');
+          sabaImages.forEach(img => {
+              img.style.cursor = 'pointer';
+              img.addEventListener('click', handleSabaClick);
+          });
+      }
+
       if (window.innerWidth <= 600) {
         closeSidebarMobile();
       }
@@ -1569,6 +1689,8 @@
     document.querySelectorAll('.sidebar-link').forEach((link) => {
       link.addEventListener('click', () => navigateToPage(link.dataset.page));
     });
+
+    navigateToPage('installation-usage');
   </script>
 </body>
 </html>
