@@ -1,1280 +1,1574 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-		/>
-		<meta name="format-detection" content="telephone=no" />
-		<title>Frequently Asked Questions</title>
-		<link rel="icon" type="image/png" href="logo.png?v=1" />
-		<link rel="icon" type="image/x-icon" href="favicon.ico" />
-
-		<style>
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-			}
-
-			html {
-				height: 100%;
-			}
-
-			body {
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-					sans-serif;
-				background-color: #1a1a1a;
-				color: #e0e0e0;
-				line-height: 1.6;
-				display: flex;
-				flex-direction: column;
-				height: 100dvh;
-				overflow: hidden;
-			}
-
-			.container {
-				max-width: 1200px;
-				margin: 0 auto;
-				padding: 0 calc(20px + env(safe-area-inset-right, 0px)) 0
-					calc(20px + env(safe-area-inset-left, 0px));
-				width: 100%;
-			}
-
-			header {
-				background-color: #1a1a1a;
-				border-bottom: 1px solid #333;
-				flex-shrink: 0;
-				z-index: 100;
-				padding-top: env(safe-area-inset-top, 0);
-			}
-
-			.header-content {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				width: 100%;
-				padding: 1rem calc(1.5rem + env(safe-area-inset-right, 0px)) 1rem
-					calc(1.5rem + env(safe-area-inset-left, 0px));
-				max-width: none;
-				margin: 0;
-			}
-
-			.logo-area {
-				display: flex;
-				align-items: center;
-				gap: 0.75rem;
-				text-decoration: none;
-			}
-
-			.header-logo-img {
-				height: 3.3rem;
-			}
-
-			.header-logo-text {
-				font-size: 2rem;
-				font-weight: bold;
-				color: #ffffff;
-				line-height: 1.2;
-			}
-
-			.search-container {
-				padding-left: 1rem;
-			}
-
-			#faq-search {
-				padding: 0.6rem 0.85rem;
-				background-color: #1a1a1a;
-				border: 1px solid #333;
-				border-radius: 8px;
-				color: #e0e0e0;
-				font-size: 1rem;
-				width: 300px;
-				transition: all 0.2s ease;
-			}
-
-			#faq-search:focus {
-				outline: none;
-				background-color: #252525;
-				border-color: #444;
-				box-shadow: none;
-			}
-
-			#faq-search::placeholder {
-				color: #666;
-			}
-
-			main {
-				background-color: #0f0f0f;
-				padding-top: 2rem;
-				padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
-				flex-grow: 1;
-				overflow-y: auto;
-			}
-
-			.faq-list {
-				display: flex;
-				flex-direction: column;
-				gap: 1rem;
-			}
-
-			.faq-item {
-				background-color: #1a1a1a;
-				border: 1px solid #333;
-				border-radius: 8px;
-				overflow: hidden;
-				display: flex;
-				flex-direction: column;
-			}
-
-			.faq-question {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				cursor: pointer;
-				padding: 1rem 1.5rem;
-				font-size: 1.2em;
-				font-weight: 500;
-				transition: background-color 0.2s, border-color 0.35s ease;
-				border-bottom: 1px solid transparent;
-			}
-
-			.faq-question:hover {
-				background-color: #252525;
-			}
-
-			.faq-question.active {
-				border-bottom-color: #333;
-			}
-
-			.faq-question span {
-				padding-right: 1rem;
-			}
-
-			.faq-arrow {
-				width: 24px;
-				height: 24px;
-				transition: transform 0.3s ease;
-				flex-shrink: 0;
-			}
-
-			.faq-question.active .faq-arrow {
-				transform: rotate(180deg);
-			}
-
-			.faq-answer {
-				max-height: 0;
-				overflow: hidden;
-				transition: max-height 0.35s ease-out;
-				color: #ccc;
-				font-size: 1em;
-			}
-
-			.faq-answer-content {
-				padding: 1rem 1.5rem;
-			}
-
-			.faq-answer-content p {
-				margin-bottom: 1em;
-			}
-			.faq-answer-content p:last-child {
-				margin-bottom: 0;
-			}
-
-			.faq-answer-content a {
-				color: #4a9eff;
-				text-decoration: none;
-				font-weight: 500;
-			}
-
-			.faq-answer-content a:hover {
-				text-decoration: underline;
-			}
-
-			.faq-answer-content code {
-				background-color: #2c2c2c;
-				padding: 3px 6px;
-				border-radius: 4px;
-				font-family: "SF Mono", "Courier New", Courier, monospace;
-				font-size: 0.9em;
-				color: #e0e0e0;
-			}
-
-			.faq-answer-content pre.code-block {
-				background-color: #2c2c2c;
-				padding: 1rem;
-				border-radius: 4px;
-				overflow-x: auto;
-				margin: 1rem 0;
-				max-width: 100%;
-			}
-
-			.faq-answer-content pre.code-block code {
-				background-color: transparent;
-				padding: 0;
-				white-space: pre-wrap;
-				word-break: break-all;
-			}
-
-			.faq-answer-content ul,
-			.faq-answer-content ol {
-				list-style-type: none;
-				padding-left: 0;
-				margin: 1rem 0;
-			}
-
-			.faq-answer-content > p + ol,
-			.faq-answer-content > p + ul {
-				margin-top: -0.5em;
-				margin-bottom: 1em;
-			}
-
-			#saba-container {
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				display: none;
-				justify-content: center;
-				align-items: center;
-				z-index: 9999;
-				pointer-events: none;
-			}
-
-			#saba-image {
-				max-width: 40vw;
-				max-height: 40vh;
-				opacity: 0;
-				transform: scale(0.1);
-			}
-
-			#saba-container.animate #saba-image {
-				animation: growAndFade 1s ease-out forwards;
-			}
-
-			@keyframes growAndFade {
-				0% {
-					transform: scale(0.1);
-					opacity: 1;
-				}
-				50% {
-					opacity: 1;
-				}
-				100% {
-					transform: scale(1.2);
-					opacity: 0;
-				}
-			}
-
-			@media (max-width: 992px) {
-				#faq-search {
-					width: 220px;
-				}
-			}
-
-			@media (max-width: 768px) {
-				main {
-					padding-top: 1.5rem;
-					padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
-				}
-
-				.container {
-					padding: 0 calc(15px + env(safe-area-inset-right, 0px)) 0
-						calc(15px + env(safe-area-inset-left, 0px));
-				}
-
-				.header-content {
-					padding: 1rem calc(1rem + env(safe-area-inset-right, 0px)) 1rem
-						calc(1rem + env(safe-area-inset-left, 0px));
-					flex-wrap: wrap;
-					row-gap: 1rem;
-				}
-
-				.logo-area {
-					flex-grow: 1;
-				}
-
-				.search-container {
-					width: 100%;
-					order: 3;
-					padding-left: 0;
-				}
-
-				#faq-search {
-					width: 100%;
-				}
-
-				.header-logo-img {
-					height: 3.5rem;
-				}
-
-				.header-logo-text {
-					font-size: 1.4rem;
-				}
-
-				.faq-question {
-					font-size: 1.1em;
-					padding: 1rem 1.25rem;
-					align-items: flex-start;
-				}
-
-				.faq-question span {
-					padding-right: 0.75rem;
-				}
-
-				.faq-arrow {
-					margin-top: 0.1em;
-				}
-
-				.faq-answer-content {
-					padding: 0.5rem 1.25rem 1.25rem 1.25rem;
-				}
-			}
-
-			@media (max-width: 480px) {
-				.header-logo-text {
-					font-size: 1.2rem;
-				}
-				.logo-area {
-					gap: 0.5rem;
-				}
-
-				.faq-question {
-					font-size: 1em;
-				}
-
-				.faq-answer {
-					font-size: 0.95em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<header>
-			<div class="header-content">
-				<a
-					href="https://discord.com/channels/924722337981530132/1172773228201132115"
-					class="logo-area"
-				>
-					<img src="./logo.png" alt="Hydrogen Logo" class="header-logo-img" />
-					<span class="header-logo-text">Frequently Asked Questions</span>
-				</a>
-				<div class="search-container">
-					<input type="text" id="faq-search" placeholder="Search..." />
-				</div>
-			</div>
-		</header>
-
-		<main>
-			<div class="container">
-				<div class="faq-list">
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>How to download and use Hydrogen?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p><strong>Requirements</strong></p>
-								<ul
-									style="
-										list-style-type: disc;
-										padding-left: 2em;
-										list-style-position: outside;
-									"
-								>
-									<li style="margin-bottom: 0.5em">macOS 11+</li>
-									<li>Administrator account</li>
-								</ul>
-
-								<p><strong>Installation</strong></p>
-								<ol
-									style="
-										list-style-type: decimal;
-										list-style-position: inside;
-										padding-left: 1em;
-										margin-bottom: 1em;
-									"
-								>
-									<li style="margin-bottom: 1em">
-										<strong>Run the install script</strong>
-										<ul
-											style="
-												list-style-type: disc;
-												padding-left: 2em;
-												margin-top: 0.5em;
-												list-style-position: outside;
-											"
-										>
-											<li>
-												Copy the script from
-												<a
-													href="https://discord.com/channels/924722337981530132/1060376974813573120"
-													>this channel</a
-												>
-											</li>
-											<li>Paste it into your terminal and press Enter</li>
-										</ul>
-									</li>
-									<li style="margin-bottom: 1em">
-										<strong>Enter your password</strong>
-										<ul
-											style="
-												list-style-type: disc;
-												padding-left: 2em;
-												margin-top: 0.5em;
-												list-style-position: outside;
-											"
-										>
-											<li>
-												Type in your password, keep in mind that it won’t be
-												visible
-											</li>
-											<li>Press Enter</li>
-										</ul>
-									</li>
-									<li style="margin-bottom: 1em">
-										<strong>Wait for completion</strong>
-										<ul
-											style="
-												list-style-type: disc;
-												padding-left: 2em;
-												margin-top: 0.5em;
-												list-style-position: outside;
-											"
-										>
-											<li>Wait for the script to install Hydrogen</li>
-											<li>After installing close the terminal</li>
-										</ul>
-									</li>
-								</ol>
-								<p><strong>Usage</strong></p>
-								<ol
-									style="
-										list-style-type: decimal;
-										list-style-position: inside;
-										padding-left: 1em;
-										margin-bottom: 1em;
-									"
-								>
-									<li style="margin-bottom: 1em">
-										<strong>First steps</strong>
-										<ul
-											style="
-												list-style-type: disc;
-												padding-left: 2em;
-												margin-top: 0.5em;
-												list-style-position: outside;
-											"
-										>
-											<li>Open Roblox</li>
-											<li>Paste your key in the pop-up window</li>
-										</ul>
-									</li>
-									<li style="margin-bottom: 1em">
-										<strong>Executing scripts</strong>
-										<ul
-											style="
-												list-style-type: disc;
-												padding-left: 2em;
-												margin-top: 0.5em;
-												list-style-position: outside;
-											"
-										>
-											<li>Open Hydrogen-M</li>
-											<li>Paste your script</li>
-											<li>Join a game</li>
-											<li>Press the “Execute” button on the bottom right</li>
-										</ul>
-									</li>
-								</ol>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>How to get a free key? </span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									You will need go to the
-									<a href="https://hydrogen.lat/unlock">key system</a> and
-									complete a few offers. You don’t need to install anything
-									from the offers except browser extension. The offers fall into
-									four main categories:
-								</p>
-
-								<p><strong>Articles</strong></p>
-								<ul
-									style="
-										list-style-type: disc;
-										padding-left: 2em;
-										list-style-position: outside;
-									"
-								>
-									<li style="margin-bottom: 0.5em">Click on an article</li>
-									<li style="margin-bottom: 0.5em">Wait for 45 seconds</li>
-									<li>Go to the next step</li>
-								</ul>
-
-								<p><strong>App Downloads</strong></p>
-								<ul
-									style="
-										list-style-type: disc;
-										padding-left: 2em;
-										list-style-position: outside;
-									"
-								>
-									<li style="margin-bottom: 0.5em">
-										Click the download button and stay on the download page for
-										45 seconds
-									</li>
-									<li style="margin-bottom: 0.5em">
-										Return to Work.ink after 45 seconds
-									</li>
-									<li>Delete the downloaded file</li>
-								</ul>
-
-								<p><strong>Browser Extensions</strong></p>
-								<ul
-									style="
-										list-style-type: disc;
-										padding-left: 2em;
-										list-style-position: outside;
-									"
-								>
-									<li style="margin-bottom: 0.5em">Install the extension</li>
-									<li style="margin-bottom: 0.5em">Return to Work.ink</li>
-									<li>Remove the extension after step completion</li>
-								</ul>
-
-								<p><strong>Sign Ups</strong></p>
-								<ul
-									style="
-										list-style-type: disc;
-										padding-left: 2em;
-										list-style-position: outside;
-									"
-								>
-									<li style="margin-bottom: 0.5em">Click the sign up button</li>
-									<li style="margin-bottom: 0.5em">
-										Go to the website and stay there for 45 seconds
-									</li>
-									<li>Return to Work.ink after 45 seconds</li>
-								</ul>
-
-								<p><strong>Extra</strong></p>
-								<ul
-									style="
-										list-style-type: disc;
-										padding-left: 2em;
-										list-style-position: outside;
-									"
-								>
-									<li style="margin-bottom: 0.5em">
-										Don’t switch back to Work.ink before the 45 seconds are up
-										or you will have to start over
-									</li>
-									<li style="margin-bottom: 0.5em">
-										Use Chrome without ad blockers or any extensions that might
-										interfere with Work.ink
-									</li>
-									<li>
-										This shouldn’t take longer than 5 minutes, if it does
-										you’re probably doing it wrong
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>How long do the keys last?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									The free keys last for 24 hours, however you can purchase an
-									<a href="https://hydrogenmacos.selly.store/">adless key</a>
-									which last longer.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>My script doesn't work or crashes.</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									Not all scripts are compatible with Hydrogen. If a script
-									doesn't work, it's either outdated or not compatible with
-									Hydrogen. You can report non-functional scripts
-									<a
-										href="https://discord.com/channels/924722337981530132/1367839253588869141"
-										>here</a
-									>.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>How to auto-execute?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									Open Hydrogen, and go to the Auto Execution tab on the left
-									sidebar, click “New Script”, and paste your script in.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>No HTTP server on ports 6969–7069.</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									This error usually means you haven’t entered a key, to fix
-									this you should reinstall Hydrogen.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>How to remove Hydrogen?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									To remove or reinstall Hydrogen from your Mac, run the script
-									below in your terminal.
-								</p>
-								<pre
-									class="code-block"
-								><code>cd && curl -LJs "https://raw.githubusercontent.com/nullstate9/roblox-stuff/refs/heads/main/executors/hydro-uninstaller.sh" -o "./hydro-uninstaller.sh" && chmod +x hydro-uninstaller.sh && sudo ./hydro-uninstaller.sh</code></pre>
-								<p>
-									The script removes the app, and reinstalls the normal version
-									of Roblox. It does keep the Hydrogen folder in the Application
-									Support folder and in your home directory, if you would like
-									to completely remove Hydrogen, delete both Roblox and Hydrogen
-									along with their folders and then reinstall Roblox from the
-									official website.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>Is my Mac supported?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									Both Intel and Silicon Macs are supported, as long as they are
-									running macOS 11 or newer (Tahoe is semi-broken, works for
-									some people doesn't for others). You can check your version by
-									typing <code>sw_vers</code> in the Terminal app.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>Is Hydrogen Supported on Mobile or Windows devices?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									Currently, Hydrogen is supported on macOS only. The iOS
-									version is going to release soon, and the Windows version is
-									in development..
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>Where do I find scripts?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									You can find scripts on the websites listed below, but keep in
-									mind that Hydrogen does not monitor these sites and some
-									scripts may be malicious.
-								</p>
-								<ul
-									style="
-										list-style-type: none;
-										padding-left: 0;
-										margin-bottom: 0;
-									"
-								>
-									<li><a href="https://rscripts.net/">rscripts.net</a></li>
-									<li><a href="https://rbxscript.com/">rbxscript.com</a></li>
-									<li>
-										<a href="https://robloxscripts.com/">robloxscripts.com</a>
-									</li>
-									<li><a href="https://scriptblox.com/">scriptblox.com</a></li>
-									<li>
-										<a href="https://scriptpastebin.com/"
-											>scriptpastebin.com</a
-										>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>What is Hydrogen’s sUNC?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									Hydrogen is at 96% sUNC. It's currently missing
-									<code>replicatesignal</code>, <code>newcclosure</code>, and
-									<code>getcallbackvalue</code>. You can click
-									<a
-										href="https://sunc.rubis.app/?scrap=5qh7GIfCDb8WZjtp&key=3Hq4Uz3Oc3X9G34ROz12ODY4VJIwXuUH"
-										>here</a
-									>
-									to view the score yourself.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>Does Hydrogen support multiple instances?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									Currently, Hydrogen does not support multiple instances. It's
-									an upcoming feature and will be added in the future. However,
-									there is a way to use multiple instances without Hydrogen.
-									Click <a href="https://appleblox.com/">here</a> to get
-									AppleBlox, a Roblox launcher that supports launching multiple
-									instances.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>Permission denied (os error)</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									To fix this error make sure that you are on an administrator
-									account and that the Terminal app has Full Disk Access.
-								</p>
-								<p><strong>Check if you are an administrator</strong></p>
-								<ol
-									style="
-										list-style-type: decimal;
-										list-style-position: inside;
-										padding-left: 1em;
-										margin-bottom: 1em;
-									"
-								>
-									<li style="margin-bottom: 0.5em">
-										Open Settings and go to “Users & Groups”
-									</li>
-									<li>Check if your account is listed as an Admin</li>
-								</ol>
-
-								<p><strong>Give Terminal Full Disk Access</strong></p>
-								<ol
-									style="
-										list-style-type: decimal;
-										list-style-position: inside;
-										padding-left: 1em;
-										margin-bottom: 1em;
-									"
-								>
-									<li style="margin-bottom: 0.5em">
-										Open Settings and go to “Privacy & Security”
-									</li>
-									<li style="margin-bottom: 0.5em">Go to “Full Disk Access”</li>
-									<li style="margin-bottom: 0.5em">
-										Press the plus icon at the bottom
-									</li>
-									<li>Add Terminal to the list</li>
-								</ol>
-
-								<p>If that didn’t fix the error make a ticket.</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>I’m getting error 403 when trying to install.</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									This error means the server refused to process your request,
-									this could happen due to a bunch of different reasons but
-									simply using a VPN fixes this issue.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>Which VPN do I use?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									You can use any VPN but if you want decent free VPN then
-									<a href="https://protonvpn.com/">ProtonVPN</a> is recommended.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>How to change DNS</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									To change your DNS open Settings and go to “Wi-Fi” then press
-									the details button and go to the “DNS” tab. Set your primary
-									dns to 1.1.1.1 by pressing the plus icon to add a new
-									address, make sure it’s the first one in the list.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>Does Hydrogen work on VMs?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									Hydrogen is not officially supported on virtual machines. It
-									may be possible to run Hydrogen in a VM, but we can't
-									guarantee that it will work properly. We will not support for
-									any VM related issues.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>Can I resell keys?</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									If you want to resell keys you will have to contact Gladius
-									directly. You can either send him a DM or make a ticket.
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="faq-item">
-						<div class="faq-question">
-							<span>I didn’t get my adless key.</span>
-							<svg
-								class="faq-arrow"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-						</div>
-						<div class="faq-answer">
-							<div class="faq-answer-content">
-								<p>
-									Check your email for the key including the spam folder. If the
-									key isn't there then open a ticket.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</main>
-
-		<script>
-			document.querySelectorAll(".faq-question").forEach((question) => {
-				question.addEventListener("click", () => {
-					const answer = question.nextElementSibling;
-					const isActive = question.classList.contains("active");
-
-					document
-						.querySelectorAll(".faq-question.active")
-						.forEach((activeQuestion) => {
-							if (activeQuestion !== question) {
-								activeQuestion.classList.remove("active");
-								activeQuestion.nextElementSibling.style.maxHeight = "0px";
-							}
-						});
-
-					question.classList.toggle("active");
-
-					if (!isActive) {
-						answer.style.maxHeight = answer.scrollHeight + "px";
-					} else {
-						answer.style.maxHeight = "0px";
-					}
-				});
-			});
-
-			const searchInput = document.getElementById("faq-search");
-			const faqItems = document.querySelectorAll(".faq-item");
-
-			searchInput.addEventListener("input", (event) => {
-				const searchTerm = event.target.value.toLowerCase();
-
-				faqItems.forEach((item) => {
-					const questionText = item
-						.querySelector(".faq-question span")
-						.textContent.toLowerCase();
-					const answerText = item
-						.querySelector(".faq-answer-content")
-						.textContent.toLowerCase();
-					const itemText = questionText + " " + answerText;
-
-					if (itemText.includes(searchTerm)) {
-						item.style.display = "flex";
-					} else {
-						item.style.display = "none";
-					}
-
-					if (item.style.display !== "none") {
-						const question = item.querySelector(".faq-question");
-						const answer = item.querySelector(".faq-answer");
-						if (question.classList.contains("active")) {
-							if (!answerText.includes(searchTerm)) {
-								question.classList.remove("active");
-								answer.style.maxHeight = "0px";
-							}
-						}
-					}
-				});
-			});
-
-			document.querySelectorAll("a").forEach((link) => {
-				link.setAttribute("target", "_blank");
-				link.setAttribute("rel", "noopener noreferrer");
-			});
-		</script>
-
-		<div id="saba-container">
-			<img id="saba-image" src="saba.png" alt="Saba" />
-		</div>
-		<audio id="saba-sound" src="saba.mp3" preload="auto"></audio>
-
-		<script>
-			const sabaCode = ["s", "a", "b", "a"];
-			let keySequence = [];
-
-			document.addEventListener("keydown", (e) => {
-				const focusedElement = document.activeElement;
-				if (
-					focusedElement &&
-					(focusedElement.tagName === "INPUT" ||
-						focusedElement.tagName === "TEXTAREA")
-				) {
-					return;
-				}
-
-				const key = e.key.toLowerCase();
-				keySequence.push(key);
-
-				if (keySequence.length > sabaCode.length) {
-					keySequence.shift();
-				}
-
-				if (JSON.stringify(keySequence) === JSON.stringify(sabaCode)) {
-					triggerSaba();
-					keySequence = [];
-				}
-			});
-
-			function triggerSaba() {
-				const container = document.getElementById("saba-container");
-				const image = document.getElementById("saba-image");
-				const sound = document.getElementById("saba-sound");
-				if (!container || !image || !sound) return;
-
-				if (container.classList.contains("animate")) {
-					return;
-				}
-
-				if (!sound.paused) {
-					sound.pause();
-					sound.currentTime = 0;
-				}
-				sound.play().catch((e) => console.error("sound error: ", e));
-
-				container.style.display = "flex";
-				container.classList.add("animate");
-
-				image.addEventListener(
-					"animationend",
-					() => {
-						container.classList.remove("animate");
-						container.style.display = "none";
-					},
-					{ once: true }
-				);
-			}
-		</script>
-	</body>
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+  <title>Frequently Asked Questions</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <script>
+    function setVh() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    window.addEventListener('resize', setVh);
+    window.addEventListener('orientationchange', setVh);
+    setVh();
+  </script>
+  <style>
+    :root {
+      --sidebar-bg: #161618;
+      --sidebar-border: #23232a;
+      --sidebar-link: #9898a0;
+      --sidebar-link-active: #fff;
+      --sidebar-link-hover: #dfdfd6;
+      --content-bg: #23232a;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      --accent: #3b82f6;
+      --search-bg: #23232a;
+      --search-outline: var(--sidebar-border);
+      --topbar-height: 56px;
+      --vh: 1vh;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: calc(var(--vh) * 100);
+      overflow-x: hidden;
+      background: var(--sidebar-bg);
+    }
+    body {
+      display: flex;
+      color: #fff;
+      font-family: 'Inter', Arial, sans-serif;
+      width: 100vw;
+      box-sizing: border-box;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: calc(var(--vh) * 100);
+      background: var(--sidebar-bg);
+      border-right: 1.5px solid var(--sidebar-border);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      z-index: 1001;
+      flex-shrink: 0;
+      transition: transform 0.25s cubic-bezier(.4, 0, .2, 1);
+    }
+    .sidebar.sidebar-mobile {
+      transform: translateX(-100%);
+      left: 0;
+      top: 0;
+      height: calc(var(--vh) * 100);
+      z-index: 1002;
+    }
+    .sidebar.sidebar-mobile.open {
+      transform: translateX(0);
+    }
+    .sidebar-header {
+      padding: 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 35px;
+      background: var(--sidebar-bg);
+    }
+    .sidebar-header-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 22px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex: 1 1 auto;
+    }
+    .sidebar-header-top img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+    .sidebar-title {
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sidebar-hr {
+      margin: 0;
+      border: none;
+      border-top: 1.5px solid var(--sidebar-border);
+    }
+    .sidebar-nav {
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+    .sidebar-section {
+      margin: 16px 0 8px;
+      padding: 0 24px;
+      font-size: 13px;
+      color: #6c6c7a;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .sidebar-links {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 24px;
+    }
+    .sidebar-link {
+      font-size: 16px;
+      color: var(--sidebar-link);
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s;
+      cursor: pointer;
+      user-select: none;
+    }
+    .sidebar-link.selected,
+    .sidebar-link:focus {
+      color: var(--sidebar-link-active);
+    }
+    .sidebar-link:hover {
+      color: var(--sidebar-link-hover);
+    }
+    .sidebar-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-top: 1.5px solid var(--sidebar-border);
+      background: var(--sidebar-bg);
+    }
+    .sidebar-footer a,
+    .sidebar-footer .search-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      color: var(--sidebar-link);
+      transition: color 0.15s;
+    }
+    .sidebar-footer a:hover,
+    .sidebar-footer .search-btn:hover {
+      color: var(--sidebar-link-hover);
+    }
+    .sidebar-footer a svg,
+    .sidebar-footer .search-btn svg {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    .content {
+      margin-left: 260px;
+      flex-grow: 1;
+      height: calc(var(--vh) * 100);
+      overflow-y: auto;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: margin-left 0.25s cubic-bezier(.4, 0, .2, 1);
+    }
+    .page-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 32px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .page-content h1 {
+      font-size: 2.2rem;
+      margin-top: 0;
+      margin-bottom: 2rem;
+      font-weight: 600;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--sidebar-border);
+    }
+    .page-content h2,
+    .page-content h3 {
+      font-weight: 600;
+    }
+    .page-content h2 {
+      font-size: 1.5rem;
+      margin: 2.5rem 0 1rem;
+    }
+    .page-content h3 {
+      font-size: 1.15rem;
+      margin: 2rem 0 0.7rem;
+      color: #fff;
+    }
+    .page-content p,
+    .page-content li {
+      color: #e0e0e6;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+    .page-content a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      word-break: break-all;
+    }
+    .page-content a:hover {
+      text-decoration: underline;
+    }
+    .page-content ul,
+    .page-content ol {
+      padding-left: 24px;
+    }
+    .page-content li {
+      margin-bottom: 0.75rem;
+    }
+    .page-content ol ul {
+      list-style-type: disc;
+      padding-left: 24px;
+      margin: 0.5em 0;
+    }
+    .page-content ol ul li {
+      margin-bottom: 0.5rem;
+    }
+    .page-content .code-block-container {
+      position: relative;
+      background-color: #1a1a1c;
+      border: 1px solid #333;
+      border-radius: 6px;
+      margin: 1em 0;
+      overflow: hidden;
+    }
+    .page-content .code-block-container::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 100px;
+      background: linear-gradient(to left, #1a1a1c 40px, transparent);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .page-content .copy-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 8px;
+      background: transparent;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: var(--sidebar-link);
+      border-radius: 4px;
+      transition: color 0.15s;
+      z-index: 2;
+    }
+    .page-content .copy-btn:hover {
+      color: var(--sidebar-link-active);
+    }
+    .page-content .copy-btn svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+    .page-content pre {
+        background-color: transparent;
+        border: none;
+        padding: 15px;
+        margin: 0;
+        white-space: nowrap;
+        overflow-x: hidden;
+    }
+    .page-content code {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        font-size: 0.9em;
+        color: #e0e0e6;
+    }
+    .credit-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 1.2rem;
+    }
+    .credit-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #333;
+    }
+    .credit-item span {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .search-highlight {
+      background: #3b82f6;
+      color: #fff;
+      border-radius: 3px;
+      padding: 0 2px;
+      transition: background 0.5s;
+      animation: highlight-fade 2s 1;
+    }
+    @keyframes highlight-fade {
+      0%   { background: #3b82f6; }
+      80%  { background: #3b82f6; }
+      100% { background: transparent; }
+    }
+
+    .search-overlay {
+      position: fixed;
+      z-index: 1000;
+      inset: 0;
+      background: rgba(20, 20, 22, 0.65);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      animation: fadeIn 0.15s;
+    }
+    .search-overlay.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .search-centerer {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10vh;
+    }
+    .search-shadow-wrap {
+      width: 100%;
+      max-width: 600px;
+      min-width: 400px;
+      box-sizing: border-box;
+      box-shadow: var(--shadow);
+    }
+    .search-box {
+      width: 100%;
+      background: var(--search-bg);
+      border: 2px solid var(--search-outline);
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      border-radius: 18px;
+      box-sizing: border-box;
+    }
+    .search-box.has-results {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .search-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 1.25rem;
+      width: 100%;
+      padding: 18px 32px;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    .search-results-container {
+      width: 100%;
+      background: var(--search-bg);
+      border: 2px solid var(--search-outline);
+      border-top: none;
+      border-radius: 0 0 18px 18px;
+      margin-top: -2px;
+      padding: 0;
+      max-height: 60vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+      -webkit-overflow-scrolling: touch;
+    }
+    .search-results-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .search-result {
+      padding: 18px 32px;
+      border-bottom: 1px solid #23232a;
+      color: #e0e0e6;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .search-result:last-child {
+      border-bottom: none;
+    }
+    .search-result a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      word-break: break-all;
+    }
+    .search-no-results {
+      padding: 18px 32px;
+      color: #888;
+      font-size: 1.05rem;
+      text-align: left;
+      transition: opacity 0.15s;
+      opacity: 1;
+    }
+    .search-no-results.hide {
+      opacity: 0;
+      pointer-events: none;
+      height: 0;
+      min-height: 0;
+      padding: 0 32px;
+      margin: 0;
+    }
+
+    .topbar {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: var(--sidebar-bg);
+      border-bottom: 1.5px solid var(--sidebar-border);
+      z-index: 1002;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      box-sizing: border-box;
+      width: 100vw;
+    }
+    .topbar .topbar-menu-btn,
+    .topbar .topbar-search-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: #fff;
+    }
+    .topbar .topbar-search-btn:hover {
+      color: var(--sidebar-link-hover);
+    }
+    .topbar svg {
+      width: 28px;
+      height: 28px;
+      display: block;
+    }
+
+    .sidebar-mobile-overlay {
+      display: none;
+      position: fixed;
+      z-index: 1001;
+      inset: 0;
+      background: rgba(20, 20, 22, 0.65);
+      animation: fadeIn 0.15s;
+    }
+    .sidebar-mobile-overlay.open {
+      display: block;
+    }
+
+    html.search-lock,
+    body.search-lock {
+      overflow: hidden !important;
+    }
+    body.search-lock .content {
+      overflow: hidden;
+    }
+
+    .sidebar-header-mobile-line {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .sidebar {
+        display: none;
+      }
+      .sidebar.sidebar-mobile {
+        display: flex;
+        width: 80vw;
+        min-width: 220px;
+        max-width: 340px;
+        box-shadow: var(--shadow);
+        border-right: 1.5px solid var(--sidebar-border);
+        background: var(--sidebar-bg);
+      }
+      .sidebar-header {
+        min-height: var(--topbar-height);
+        padding-right: 12px;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+      .sidebar-header-top {
+        font-size: 20px;
+        padding: 20px 0;
+      }
+      .sidebar-footer {
+        display: none !important;
+      }
+      .sidebar-header-mobile-line {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1.5px;
+        background: var(--sidebar-border);
+        z-index: 1;
+      }
+      .content {
+        margin-left: 0;
+        margin-top: var(--topbar-height);
+        height: calc(var(--vh) * 100 - var(--topbar-height));
+        width: 100vw;
+        min-width: 0;
+        padding-bottom: env(safe-area-inset-bottom, 16px);
+      }
+      .page-content {
+        padding: 24px 20px;
+        max-width: 100vw;
+        padding-bottom: env(safe-area-inset-bottom, 16px);
+      }
+      .page-content h1 {
+        font-size: 1.8rem;
+      }
+      .page-content h2 {
+        font-size: 1.3rem;
+      }
+      .page-content h3 {
+        font-size: 1.1rem;
+      }
+      .page-content p,
+      .page-content li {
+        font-size: 0.9rem;
+      }
+      .sidebar-section {
+        font-size: 12px;
+      }
+      .sidebar-link {
+        font-size: 15px;
+      }
+      .topbar {
+        display: flex;
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+
+      .search-centerer {
+        margin-top: 12vh;
+      }
+      .search-shadow-wrap {
+        width: 92vw !important;
+        min-width: 0 !important;
+        max-width: 96vw !important;
+      }
+      .search-box {
+        min-height: 50px !important;
+      }
+      .search-input {
+        font-size: 16px !important;
+        padding: 14px 16px !important;
+      }
+      .search-result,
+      .search-no-results {
+        padding: 12px 16px !important;
+        font-size: 0.9rem !important;
+      }
+      .search-result > div:first-child {
+        font-size: 0.85rem !important;
+      }
+    }
+    @media (max-width: 400px) {
+      .page-content {
+        padding: 20px 16px;
+        padding-bottom: env(safe-area-inset-bottom, 12px);
+      }
+      .page-content h1 {
+        font-size: 1.6rem;
+      }
+      .page-content h2 {
+        font-size: 1.2rem;
+      }
+      .page-content h3 {
+        font-size: 1.0rem;
+      }
+      .page-content p,
+      .page-content li {
+        font-size: 0.85rem;
+      }
+      .sidebar-section {
+        font-size: 11px;
+      }
+      .sidebar-link {
+        font-size: 14px;
+      }
+      .sidebar-header-top {
+        font-size: 18px;
+      }
+      .search-shadow-wrap {
+        width: 96vw !important;
+        max-width: 99vw !important;
+      }
+      .search-input {
+        padding: 12px 14px !important;
+        font-size: 16px !important;
+      }
+      .search-result,
+      .search-no-results {
+        padding: 10px 14px !important;
+        font-size: 0.85rem !important;
+      }
+      .search-result > div:first-child {
+        font-size: 0.8rem !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar" id="topbar">
+    <button
+      class="topbar-menu-btn"
+      id="topbar-menu-btn"
+      aria-label="Toggle sidebar"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M4 12h16" />
+        <path d="M4 18h16" />
+        <path d="M4 6h16" />
+      </svg>
+    </button>
+    <span style="width:28px;height:28px;display:inline-block;"></span>
+    <button
+      class="topbar-search-btn"
+      id="topbar-search-btn"
+      aria-label="Search"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        viewBox="0 0 24 24"
+      >
+        <path d="m21 21-4.34-4.34" />
+        <circle cx="11" cy="11" r="8" />
+      </svg>
+    </button>
+  </div>
+  <div class="sidebar-mobile-overlay" id="sidebar-mobile-overlay"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-header-mobile-line"></div>
+      <div class="sidebar-header-top">
+        <img src="logo.png" alt="Logo" />
+        <span class="sidebar-title">Hydrogen FAQ</span>
+      </div>
+    </div>
+    <hr class="sidebar-hr" />
+    <div class="sidebar-nav">
+      <div class="sidebar-section">FIRST STEPS</div>
+      <div class="sidebar-links">
+        <span
+          class="sidebar-link selected"
+          data-page="installation-usage"
+        >
+          Installation & Usage
+        </span>
+        <span class="sidebar-link" data-page="keys">Keys</span>
+        <span class="sidebar-link" data-page="auto-execute">
+          Auto-Execute
+        </span>
+      </div>
+      <div class="sidebar-section">GENERAL</div>
+      <div class="sidebar-links">
+        <span class="sidebar-link" data-page="sunc">
+          sUNC
+        </span>
+        <span class="sidebar-link" data-page="supported-platforms">
+          Supported Platforms
+        </span>
+        <span class="sidebar-link" data-page="scripts">
+          Scripts
+        </span>
+        <span class="sidebar-link" data-page="network">
+          Network
+        </span>
+        <span class="sidebar-link" data-page="troubleshooting">
+          Troubleshooting
+        </span>
+        <span class="sidebar-link" data-page="uninstallation">
+          Uninstallation
+        </span>
+      </div>
+      <div class="sidebar-section">EXTRA</div>
+      <div class="sidebar-links">
+        <span class="sidebar-link" data-page="credits">
+          Credits
+        </span>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="search-btn" aria-label="Search" id="search-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          viewBox="0 0 24 24"
+        >
+          <path d="m21 21-4.34-4.34" />
+          <circle cx="11" cy="11" r="8" />
+        </svg>
+      </button>
+      <a
+        href="https://discord.gg/hydrogen"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 
+            0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 
+            12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 
+            0 0-.052-.025c-1.125.194-2.22.534-3.257 
+            1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 
+            9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 
+            0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 
+            0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 
+            0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 
+            0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 
+            0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 
+            8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 
+            .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 
+            13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 
+            0 0 0-.02-.019m-8.198 7.307c-.789 
+            0-1.438-.724-1.438-1.612s.637-1.613 
+            1.438-1.613c.807 0 1.45.73 1.438 1.613 
+            0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 
+            0-1.438-.724-1.438-1.612s.637-1.613 
+            1.438-1.613c.807 0 1.451.73 1.438 
+            1.613 0 .888-.631 1.612-1.438 1.612"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="content" id="main-content">
+    <div class="page-content" id="page-content">
+      <h1>Installation & Usage</h1>
+      <h3>Requirements</h3>
+      <ul>
+        <li>macOS 11.7.1+</li>
+        <li>Administrator account</li>
+      </ul>
+      <h3>Installation</h3>
+      <ol>
+        <li>
+          <strong>Run the install script</strong>
+          <ul>
+            <li>
+              Copy the script from
+              <a
+                href="https://discord.com/channels/924722337981530132/1060376974813573120"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                this channel
+              </a>
+            </li>
+            <li>Paste it into your terminal and press Enter</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Enter your password</strong>
+          <ul>
+            <li>Type in your password (it won't be visible)</li>
+            <li>Press Enter</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Wait for completion</strong>
+          <ul>
+            <li>Wait for the script to install Hydrogen</li>
+            <li>After installing, close the terminal</li>
+          </ul>
+        </li>
+      </ol>
+      <h2>First Steps</h2>
+      <ul>
+        <li>Open Roblox</li>
+        <li>Paste your key in the pop-up window</li>
+      </ul>
+      <h2>Executing Scripts</h2>
+      <ul>
+        <li>Open Hydrogen-M</li>
+        <li>Paste your script</li>
+        <li>Join a game</li>
+        <li>Press the "Execute" button on the bottom right</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="search-overlay" id="search-overlay" tabindex="-1">
+    <div class="search-centerer">
+      <div class="search-shadow-wrap" id="search-shadow-wrap">
+        <div class="search-box" id="search-box">
+          <input
+            type="text"
+            class="search-input"
+            id="search-input"
+            placeholder="Search FAQ…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+        <div
+          class="search-results-container"
+          id="search-results-container"
+          style="display:none"
+        >
+          <ul class="search-results-list" id="search-results-list"></ul>
+          <div class="search-no-results" id="search-no-results">
+            No results found.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-mobile-overlay');
+    const topbarMenuBtn = document.getElementById('topbar-menu-btn');
+    const mainContent = document.getElementById('main-content');
+
+    function openSidebarMobile() {
+      sidebar.classList.add('sidebar-mobile');
+      setTimeout(() => {
+        sidebar.classList.add('open');
+        sidebarOverlay.classList.add('open');
+      }, 10);
+      document.documentElement.classList.add('search-lock');
+      document.body.classList.add('search-lock');
+    }
+    function closeSidebarMobile() {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('open');
+      setTimeout(() => {
+        sidebar.classList.remove('sidebar-mobile');
+        if (!searchActive) {
+            document.documentElement.classList.remove('search-lock');
+            document.body.classList.remove('search-lock');
+        }
+      }, 250);
+    }
+    topbarMenuBtn.addEventListener('click', () => {
+      if (sidebar.classList.contains('open')) {
+        closeSidebarMobile();
+      } else {
+        openSidebarMobile();
+      }
+    });
+    sidebarOverlay.addEventListener('click', closeSidebarMobile);
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 600) {
+        closeSidebarMobile();
+      }
+    });
+
+    let touchstartX = 0;
+    let touchendX = 0;
+    let touchstartY = 0;
+    let touchendY = 0;
+    const minSwipeDistance = 75;
+    const maxVerticalDeviation = 50;
+
+    document.body.addEventListener('touchstart', e => {
+      if (window.innerWidth <= 600) {
+        touchstartX = e.changedTouches[0].screenX;
+        touchstartY = e.changedTouches[0].screenY;
+      }
+    }, { passive: true });
+
+    document.body.addEventListener('touchend', e => {
+      if (window.innerWidth <= 600) {
+        touchendX = e.changedTouches[0].screenX;
+        touchendY = e.changedTouches[0].screenY;
+
+        const diffX = touchendX - touchstartX;
+        const diffY = Math.abs(touchendY - touchstartY);
+
+        if (diffY > maxVerticalDeviation) {
+          return;
+        }
+
+        if (Math.abs(diffX) > minSwipeDistance) {
+          if (diffX > 0) {
+            if (!sidebar.classList.contains('open') && mainContent.contains(e.target)) {
+              openSidebarMobile();
+            }
+          } else {
+            if (sidebar.classList.contains('open') && (sidebar.contains(e.target) || sidebarOverlay.contains(e.target))) {
+              closeSidebarMobile();
+            }
+          }
+        }
+      }
+    });
+
+
+    function addIdsToHtml(html, page) {
+      let idCounter = 0;
+      html = html.replace(
+        /<(h[1-6])([^>]*)>([\s\S]*?)<\/h[1-6]>/gi,
+        (m, tag, attrs, content) => {
+          idCounter++;
+          const id = `${page}-heading-${idCounter}`;
+          return `<${tag}${attrs} id="${id}">${content}</${tag}>`;
+        }
+      );
+      html = html.replace(
+        /<li([^>]*)>([\s\S]*?)<\/li>/gi,
+        (m, attrs, content) => {
+          idCounter++;
+          const id = `${page}-li-${idCounter}`;
+          return `<li${attrs} id="${id}">${content}</li>`;
+        }
+      );
+      html = html.replace(
+        /<p([^>]*)>([\s\S]*?)<\/p>/gi,
+        (m, attrs, content) => {
+          idCounter++;
+          const id = `${page}-p-${idCounter}`;
+          return `<p${attrs} id="${id}">${content}</p>`;
+        }
+      );
+      return html;
+    }
+
+    const searchData = [
+      {
+        page: 'installation-usage',
+        title: 'Installation & Usage',
+        html: addIdsToHtml(
+          `
+          <h1>Installation & Usage</h1>
+          <h3>Requirements</h3>
+          <ul>
+            <li>macOS 11.7.1+</li>
+            <li>Administrator account</li>
+          </ul>
+          <h3>Installation</h3>
+          <ol>
+            <li>
+              <strong>Run the install script</strong>
+              <ul>
+                <li>
+                  Copy the script from
+                  <a href="https://discord.com/channels/924722337981530132/1060376974813573120"
+                     target="_blank"
+                     rel="noopener noreferrer">
+                    this channel
+                  </a>
+                </li>
+                <li>Paste it into your terminal and press Enter</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Enter your password</strong>
+              <ul>
+                <li>Type in your password (it won't be visible)</li>
+                <li>Press Enter</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Wait for completion</strong>
+              <ul>
+                <li>Wait for the script to install Hydrogen</li>
+                <li>After installing, close the terminal</li>
+              </ul>
+            </li>
+          </ol>
+          <h2>First Steps</h2>
+          <ul>
+            <li>Open Roblox</li>
+            <li>Paste your key in the pop-up window</li>
+          </ul>
+          <h2>Executing Scripts</h2>
+          <ul>
+            <li>Open Hydrogen-M</li>
+            <li>Paste your script</li>
+            <li>Join a game</li>
+            <li>Press the "Execute" button on the bottom right</li>
+          </ul>
+        `,
+          'installation-usage'
+        )
+      },
+      {
+        page: 'keys',
+        title: 'Keys',
+        html: addIdsToHtml(
+          `
+          <h1>Keys</h1>
+          <h2>How to get a free key?</h2>
+          <p>
+            You will need to go to the
+            <a href="https://hydrogen.lat/unlock"
+               target="_blank"
+               rel="noopener noreferrer">
+              key system
+            </a>
+            and complete a few offers. You won't need to install
+            anything except browser extensions. The offers fall into
+            four main categories:
+          </p>
+          <h3>Articles</h3>
+          <ul>
+            <li>Click on an article</li>
+            <li>Wait for 45 seconds</li>
+            <li>Go to the next step</li>
+          </ul>
+          <h3>App Downloads</h3>
+          <ul>
+            <li>
+              Click the download button and stay on the download page
+              for 45 seconds
+            </li>
+            <li>Return to Work.ink after 45 seconds</li>
+            <li>Delete the downloaded file</li>
+          </ul>
+          <h3>Browser Extensions</h3>
+          <ul>
+            <li>Install the extension</li>
+            <li>Return to Work.ink</li>
+            <li>Remove the extension after step completion</li>
+          </ul>
+          <h3>Sign-Ups</h3>
+          <ul>
+            <li>Click the sign up button</li>
+            <li>Stay on the site for 45 seconds</li>
+            <li>Return to Work.ink</li>
+          </ul>
+          <h3>Extra</h3>
+          <ul>
+            <li>
+              Don't switch back to Work.ink before the 45 seconds are up or you will have to start over
+            </li>
+            <li>
+              Use Chrome without ad blockers or any extensions that might interfere with Work.ink
+            </li>
+            <li>
+              This shouldn't take longer than 5 minutes, if it does you're probably doing it wrong
+            </li>
+          </ul>
+          <h2>How long do the keys last?</h2>
+          <p>
+            Free keys last 24 hours. You can purchase an adless key
+            <a href="https://hydrogenmacos.selly.store/"
+               target="_blank"
+               rel="noopener noreferrer">
+              here
+            </a>
+            which lasts longer.
+          </p>
+          <h2>I didn't get my adless key.</h2>
+          <p>
+            Check your email (and spam folder). If it's not there, open a ticket.
+          </p>
+          <h2>Can I resell keys?</h2>
+          <p>
+            If you want to resell keys you will have to contact Gladius directly. You can either send him a DM or make a ticket.
+          </p>
+        `,
+          'keys'
+        )
+      },
+      {
+        page: 'auto-execute',
+        title: 'Auto-Execute',
+        html: addIdsToHtml(
+          `
+          <h1>Auto-Execute</h1>
+          <h2>How to auto-execute?</h2>
+          <p>
+            Open Hydrogen and go to the "Auto Execution" tab, create
+            a new script and paste your script in.
+          </p>
+          <h2>Can I disable auto-execution?</h2>
+          <p>
+            You can disable auto-execution for <strong>all</strong> scripts
+            with the button in the top right.
+          </p>
+          <h2>My script doesn't work when auto-executing.</h2>
+          <p>
+            The script might break since it executes before the game loads, add <code>task.wait(5)</code>
+            at the start to let the game load before the script executes.
+          </p>
+        `,
+          'auto-execute'
+        )
+      },
+      {
+        page: 'sunc',
+        title: 'sUNC',
+        html: addIdsToHtml(
+          `
+          <h1>sUNC</h1>
+          <p>Hydrogen is at 97% sUNC. It’s missing <code>replicatesignal</code> and <code>getcallbackvalue</code>. You can click <a href="https://r.sunc.su/HU5TwjC5YW" target="_blank" rel="noopener noreferrer">here</a> to view the score yourself.</p>
+          `,
+          'sunc'
+        )
+      },
+      {
+        page: 'supported-platforms',
+        title: 'Supported Platforms',
+        html: addIdsToHtml(
+          `
+          <h1>Supported Platforms</h1>
+          <h2>Mac</h2>
+          <p>Hydrogen only supports macOS 11.7.1 and later, You can use <a href="https://dortania.github.io/OpenCore-Legacy-Patcher/" target="_blank" rel="noopener noreferrer">OpenCore Legacy Patcher</a> to update if your Mac doesn’t support it.</p>
+          <h2>iOS</h2>
+          <p>The iOS version is currently in development and is going to release soon.</p>
+          <h2>Windows</h2>
+          <p>The Windows version is in development but the iOS version is a priority. There’s no exact release date.</p>
+          <h2>Virtual Machines</h2>
+          <p>Hydrogen is not guaranteed to work in VMs, it might be possible to run Hydrogen in a VM, but we can’t guarantee functionality. We will not provide support for anyone running Hydrogen in a VM.</p>
+          `,
+          'supported-platforms'
+        )
+      },
+      {
+        page: 'scripts',
+        title: 'Scripts',
+        html: addIdsToHtml(
+          `
+          <h1>Scripts</h1>
+          <h2>Where do I find scripts?</h2>
+          <p>You can find scripts on the websites listed below, but keep in mind that Hydrogen does not monitor these sites and some scripts may be malicious.</p>
+          <p><a href="https://rscripts.net/" target="_blank" rel="noopener noreferrer">https://rscripts.net/</a></p>
+          <p><a href="https://rbxscript.com/" target="_blank" rel="noopener noreferrer">https://rbxscript.com/</a></p>
+          <p><a href="https://robloxscripts.com/" target="_blank" rel="noopener noreferrer">https://robloxscripts.com/</a></p>
+          <p><a href="https://scriptpastebin.com/" target="_blank" rel="noopener noreferrer">https://scriptpastebin.com/</a></p>
+          <p><a href="https://cheater.fun/hacks_roblox/" target="_blank" rel="noopener noreferrer">https://cheater.fun/hacks_roblox/</a></p>
+          <h2>My script doesn’t work or crashes.</h2>
+          <p>Not all scripts are compatible with Hydrogen. If a script doesn't work, it's either outdated or not compatible with Hydrogen. You can report non-functional scripts <a href="https://discord.com/channels/924722337981530132/1367839253588869141" target="_blank" rel="noopener noreferrer">here</a>.</p>
+          `,
+          'scripts'
+        )
+      },
+      {
+        page: 'network',
+        title: 'Network',
+        html: addIdsToHtml(
+          `
+          <h1>Network</h1>
+          <h2>Which VPN do I use?</h2>
+          <p>You can use any VPN but if you want decent free options then check out <a href="https://protonvpn.com/" target="_blank" rel="noopener noreferrer">ProtonVPN</a> and <a href="https://one.one.one.one/" target="_blank" rel="noopener noreferrer">WARP</a>.</p>
+          <h2>How to change DNS?</h2>
+          <p>To change your DNS open Settings and go to “Wi-Fi” then press the details button and go to the “DNS” tab. Set your primary dns to 1.1.1.1 by pressing the plus icon to add a new address, make sure it’s the first one in the list.</p>
+          `,
+          'network'
+        )
+      },
+      {
+        page: 'troubleshooting',
+        title: 'Troubleshooting',
+        html: addIdsToHtml(
+          `
+          <h1>Troubleshooting</h1>
+          <h2>No HTTP server on ports 6969–7069</h2>
+          <p>This error usually means you haven't entered a key. To fix this, you should paste your key inside the key pop-up when you first open Roblox. If you don't see the pop-up, then you should reinstall Hydrogen.</p>
+          <h2>Permission denied (os error)</h2>
+          <p>To fix this error make sure that you are on an administrator account and that the Terminal app has Full Disk Access.</p>
+          <h3>Check if you are an administrator</h3>
+          <ol>
+            <li>Open Settings and go to “Users & Groups”</li>
+            <li>Check if your account is listed as an Admin</li>
+          </ol>
+          <h3>Give Terminal Full Disk Access</h3>
+          <ol>
+            <li>Open Settings and go to “Privacy & Security”</li>
+            <li>Go to “Full Disk Access”</li>
+            <li>Press the plus icon at the bottom</li>
+            <li>Add Terminal to the list</li>
+          </ol>
+          <h2>Error 403</h2>
+          <p>This errors occurs during installation, this happens because the server refused to process your request, this could happen due to a bunch of different reasons but using a VPN should fix this issue.</p>
+          `,
+          'troubleshooting'
+        )
+      },
+      {
+        page: 'uninstallation',
+        title: 'Uninstallation',
+        html: addIdsToHtml(
+          `
+          <h1>Uninstallation</h1>
+          <p>To remove or reinstall Hydrogen from your Mac, run the script below in your terminal.</p>
+          <div class="code-block-container">
+            <button class="copy-btn" aria-label="Copy code">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            </button>
+            <pre><code>cd && curl -LJs "https://raw.githubusercontent.com/nullstate9/roblox-stuff/refs/heads/main/executors/hydro-uninstaller.sh" -o "./hydro-uninstaller.sh" && chmod +x hydro-uninstaller.sh && sudo ./hydro-uninstaller.sh</code></pre>
+          </div>
+          <p>The script removes the app, and reinstalls the normal version of Roblox. It does keep the Hydrogen folder in the Application Support folder and in your home directory, if you would like to completely remove Hydrogen, delete both Roblox and Hydrogen along with their folders and then reinstall Roblox from the official website.</p>
+          `,
+          'uninstallation'
+        )
+      },
+      {
+        page: 'credits',
+        title: 'Credits',
+        html: addIdsToHtml(
+          `
+          <h1>Credits</h1>
+          <h2>Writing</h2>
+          <div class="credit-item">
+            <img src="saba.png" alt="Saba" class="credit-avatar" />
+            <span>Saba</span>
+          </div>
+          <h2>Design</h2>
+          <div class="credit-item">
+            <img src="saba.png" alt="Saba" class="credit-avatar" />
+            <span>Saba</span>
+          </div>
+          <h2>Programming</h2>
+          <div class="credit-item">
+            <img src="saba.png" alt="Saba" class="credit-avatar" />
+            <span>Saba</span>
+          </div>
+          <div class="credit-item">
+            <img src="claude.png" alt="Claude" class="credit-avatar" />
+            <span>Claude 4 Sonnet (Reasoning)</span>
+          </div>
+          `,
+          'credits'
+        )
+      }
+    ];
+
+    function cleanHTMLForSearch(html) {
+      html = html.replace(/<code[\s\S]*?<\/code>/gi, '');
+      html = html.replace(/<pre[\s\S]*?<\/pre>/gi, '');
+      html = html.replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, '');
+      html = html.replace(/ on\w+="[^"]*"/g, '');
+      html = html.replace(/<a([^>]*?)>/gi, function (m, attrs) {
+        let keep = attrs.match(/(href|target|rel)="[^"]*"/g);
+        return '<a' + (keep ? ' ' + keep.join(' ') : '') + '>';
+      });
+      return html;
+    }
+
+    function extractSearchSnippets(html) {
+      html = cleanHTMLForSearch(html);
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      const snippets = [];
+      function walk(node) {
+        if (node.nodeType === 3) {
+          const text = node.nodeValue.trim();
+          if (text.length > 0) {
+            let parent = node.parentElement;
+            let id = null;
+            while (parent && !id) {
+              id = parent.id;
+              parent = parent.parentElement;
+            }
+            snippets.push({ type: 'text', content: text, id });
+          }
+        } else if (node.nodeType === 1) {
+          if (node.tagName === 'A') {
+            const href = node.getAttribute('href');
+            const text = node.textContent.trim();
+            let parent = node.parentElement;
+            let id = null;
+            while (parent && !id) {
+              id = parent.id;
+              parent = parent.parentElement;
+            }
+            if (text.length > 0) {
+              snippets.push({
+                type: 'link',
+                content: text,
+                href: href,
+                target: node.getAttribute('target'),
+                rel: node.getAttribute('rel'),
+                id
+              });
+            }
+          } else {
+            for (let child of node.childNodes) walk(child);
+          }
+        }
+      }
+      walk(div);
+      return snippets;
+    }
+
+    function searchFAQ(query) {
+      if (!query.trim()) return [];
+      const q = query.trim().toLowerCase();
+      const results = [];
+      for (const entry of searchData) {
+        const snippets = extractSearchSnippets(entry.html);
+        for (const snip of snippets) {
+          let haystack = snip.content.toLowerCase();
+          if (haystack.includes(q)) {
+            results.push({
+              page: entry.page,
+              title: entry.title,
+              snippet: snip
+            });
+          }
+        }
+      }
+      return results;
+    }
+
+    const searchOverlay = document.getElementById('search-overlay');
+    const searchBox = document.getElementById('search-box');
+    const searchInput = document.getElementById('search-input');
+    const searchResultsContainer = document.getElementById('search-results-container');
+    const searchResultsList = document.getElementById('search-results-list');
+    const searchNoResults = document.getElementById('search-no-results');
+    let searchActive = false;
+    let lastViewportHeight = 0;
+
+    const adjustSearchResultsHeight = () => {
+        if (!searchActive || !window.visualViewport) return;
+
+        if (window.innerWidth <= 600) {
+            const currentViewportHeight = window.visualViewport.height;
+
+            if (currentViewportHeight < lastViewportHeight || lastViewportHeight === 0) {
+                const containerTop = searchResultsContainer.getBoundingClientRect().top;
+                const maxHeight = currentViewportHeight - containerTop;
+                if (maxHeight > 0) {
+                    searchResultsContainer.style.maxHeight = `${maxHeight}px`;
+                }
+            }
+            lastViewportHeight = currentViewportHeight;
+        } else {
+            searchResultsContainer.style.maxHeight = '';
+        }
+    };
+
+    function openSearch() {
+      searchOverlay.classList.add('active');
+      searchInput.value = '';
+      searchBox.classList.remove('has-results');
+      searchResultsContainer.style.display = 'none';
+      searchResultsList.innerHTML = '';
+      searchNoResults.classList.remove('hide');
+      setTimeout(() => searchInput.focus(), 50);
+      searchActive = true;
+      document.documentElement.classList.add('search-lock');
+      document.body.classList.add('search-lock');
+      
+      if (window.visualViewport) {
+          lastViewportHeight = 0;
+          adjustSearchResultsHeight(); 
+          window.visualViewport.addEventListener('resize', adjustSearchResultsHeight);
+      }
+    }
+
+    function closeSearch() {
+      searchOverlay.classList.remove('active');
+      searchInput.value = '';
+      searchBox.classList.remove('has-results');
+      searchResultsContainer.style.display = 'none';
+      searchResultsList.innerHTML = '';
+      searchNoResults.classList.remove('hide');
+      searchActive = false;
+      document.documentElement.classList.remove('search-lock');
+      document.body.classList.remove('search-lock');
+      
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', adjustSearchResultsHeight);
+      }
+      searchResultsContainer.style.maxHeight = '';
+    }
+
+    document.getElementById('search-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      openSearch();
+    });
+    document.getElementById('topbar-search-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      openSearch();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (searchActive) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+      if (searchActive && e.key === 'Escape') {
+        closeSearch();
+      }
+    });
+
+    searchOverlay.addEventListener('mousedown', (e) => {
+      if (e.target === searchOverlay) closeSearch();
+    });
+
+    searchInput.addEventListener('input', function () {
+      const query = this.value;
+      if (!query.trim()) {
+        searchResultsContainer.style.display = 'none';
+        searchBox.classList.remove('has-results');
+        searchResultsList.innerHTML = '';
+        searchNoResults.classList.remove('hide');
+        return;
+      }
+      
+      const results = searchFAQ(query);
+      searchResultsList.innerHTML = '';
+      searchBox.classList.add('has-results');
+
+      if (results.length === 0) {
+        searchResultsContainer.style.display = 'block';
+        searchNoResults.classList.remove('hide');
+      } else {
+        searchResultsList.innerHTML = results
+          .slice(0, 10)
+          .map((result) => {
+            let snippetHTML;
+            if (result.snippet.type === 'link') {
+              snippetHTML = `<a href="${result.snippet.href}" target="${
+                result.snippet.target || ''
+              }" rel="${result.snippet.rel || ''}">${
+                result.snippet.content
+              }</a>`;
+            } else {
+              snippetHTML = result.snippet.content.replace(
+                new RegExp(`(${query})`, 'ig'),
+                '<mark style="background:#3b82f6;color:#fff;border-radius:3px;padding:0 2px;">$1</mark>'
+              );
+            }
+            return `<li class="search-result" data-page="${result.page}" data-id="${result.snippet.id || ''}">
+              <div style="font-size:0.98rem;color:#6c6c7a;margin-bottom:2px;">
+                ${result.title}
+              </div>
+              <div>${snippetHTML}</div>
+            </li>`;
+          })
+          .join('');
+        searchResultsContainer.style.display = 'block';
+        searchNoResults.classList.add('hide');
+        document.querySelectorAll('.search-result').forEach((el) => {
+          el.addEventListener('click', function () {
+            const page = this.getAttribute('data-page');
+            const id = this.getAttribute('data-id');
+            closeSearch();
+            navigateToPage(page, id, searchInput.value);
+          });
+        });
+      }
+      adjustSearchResultsHeight();
+    });
+
+    const pages = {};
+    searchData.forEach(entry => {
+        pages[entry.page] = { content: entry.html };
+    });
+
+    function scrollToAndHighlight(id, query) {
+      if (!id) return;
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (query) {
+            document.querySelectorAll('.search-highlight')
+              .forEach((e) => e.classList.remove('search-highlight'));
+            const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            el.innerHTML = el.innerHTML.replace(
+              new RegExp(`(${safeQuery})`, 'ig'),
+              '<span class="search-highlight">$1</span>'
+            );
+          }
+        }
+      }, 50);
+    }
+
+    function navigateToPage(pageId, scrollId = null, query = null) {
+      document.querySelectorAll('.sidebar-link').forEach((link) => {
+        link.classList.toggle('selected', link.dataset.page === pageId);
+      });
+      document.getElementById('page-content').innerHTML = pages[pageId].content;
+      document.querySelector('.content').scrollTop = 0;
+      if (scrollId) {
+        scrollToAndHighlight(scrollId, query);
+      }
+      
+      document.querySelectorAll('.copy-btn').forEach(button => {
+        const copyIcon = button.innerHTML;
+        const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+        
+        button.addEventListener('click', function() {
+          const code = this.closest('.code-block-container').querySelector('code').textContent;
+          navigator.clipboard.writeText(code).then(() => {
+            this.innerHTML = checkIcon;
+            this.disabled = true;
+            setTimeout(() => {
+              this.innerHTML = copyIcon;
+              this.disabled = false;
+            }, 2000);
+          }).catch(err => {
+            console.error('Failed to copy text: ', err);
+          });
+        });
+      });
+
+      if (window.innerWidth <= 600) {
+        closeSidebarMobile();
+      }
+    }
+
+    document.querySelectorAll('.sidebar-link').forEach((link) => {
+      link.addEventListener('click', () => navigateToPage(link.dataset.page));
+    });
+  </script>
+</body>
 </html>
