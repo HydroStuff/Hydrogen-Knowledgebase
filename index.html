@@ -83,17 +83,17 @@
       position: relative;
       display: flex;
       align-items: center;
+      justify-content: center;
       min-height: 35px;
       background: var(--sidebar-bg);
     }
     .sidebar-header-top {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-size: 22px;
       font-weight: 600;
       white-space: nowrap;
-      flex: 1 1 auto;
     }
     .sidebar-header-top img {
       width: 28px;
@@ -333,7 +333,7 @@
 
     .search-overlay {
       position: fixed;
-      z-index: 1000;
+      z-index: 1003;
       inset: 0;
       background: rgba(20, 20, 22, 0.65);
       display: none;
@@ -532,9 +532,7 @@
       }
       .sidebar-header {
         min-height: var(--topbar-height);
-        padding-right: 12px;
-        padding-top: 0;
-        padding-bottom: 0;
+        padding: 0 12px;
       }
       .sidebar-header-top {
         font-size: 20px;
@@ -1478,7 +1476,10 @@
     });
 
     searchOverlay.addEventListener('mousedown', (e) => {
-      if (e.target === searchOverlay) closeSearch();
+      const searchWrapper = document.getElementById('search-shadow-wrap');
+      if (!searchWrapper.contains(e.target)) {
+        closeSearch();
+      }
     });
 
     searchInput.addEventListener('input', function () {
@@ -1585,7 +1586,6 @@
         analyserNode = audioContext.createAnalyser();
         analyserNode.fftSize = 64;
         audioSource = audioContext.createMediaElementSource(radioAudio);
-        audioDataArray = new Uint8Array(analyserNode.frequencyBinCount);
         audioSource.connect(analyserNode);
         analyserNode.connect(audioContext.destination);
         isAudioSetup = true;
